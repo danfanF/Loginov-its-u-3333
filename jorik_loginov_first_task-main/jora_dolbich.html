@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Product List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 20px;
+        }
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin: 15px;
+            padding: 20px;
+            width: 250px;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: scale(1.05);
+        }
+        .card h2 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 10px;
+            word-wrap: break-word;
+        }
+        .card p {
+            font-size: 16px;
+            margin: 5px 0;
+        }
+        .card .price {
+            font-size: 20px;
+            color: #28a745;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container" id="product-list">
+    <!-- Здесь будут карточки продуктов -->
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        fetch('http://localhost:8080/api/v1/product/get/all')
+            .then(response => response.json())
+            .then(data => {
+                const container = document.getElementById('product-list');
+                data.forEach(product => {
+                    const card = document.createElement('div');
+                    card.classList.add('card');
+                    card.innerHTML = `
+                        <h2>${product.name}</h2>
+                        <p>ID: ${product.id}</p>
+                        <p class="price">Price: ${product.cost} ₽</p>
+                        <p>Amount: ${product.amount}</p>
+                        <p>Created At: ${new Date(product.createdAt).toLocaleDateString()}</p>
+                    `;
+                    container.appendChild(card);
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    });
+</script>
+
+</body>
+</html>
